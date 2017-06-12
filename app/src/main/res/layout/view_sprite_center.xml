@@ -2,13 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="left"
     >
     <ImageView
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:src="@drawable/sprite"
-        android:id="@+id/sprite_left"/>
+        android:id="@+id/sprite_center"/>
 
-    
+
 </RelativeLayout>

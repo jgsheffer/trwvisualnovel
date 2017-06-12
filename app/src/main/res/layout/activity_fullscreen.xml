@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:background="#0099cc"
     tools:context="net.trwcomics.vnovel.FullscreenActivity">
-    <include layout="@layout/view_background">
+    <include layout="@layout/view_background"/>
 
-    </include>
-    <include layout="@layout/sprite_right"></include>
+    <!--</include>-->
+    <include layout="@layout/view_sprite_left"></include>
 <include layout="@layout/view_speech_box"></include>
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
