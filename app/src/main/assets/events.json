@@ -1,0 +1,78 @@
+{
+  "event0": {
+    "scenes": {
+      "*": [
+        {
+          "speaker": "Grant",
+          "text": "What!",
+          "sfx": "shake",
+          "left_sprite": "",
+          "right_sprite": "",
+          "center_sprite": "",
+          "background": "background2",
+          "music_file": "",
+          "music_start": true,
+          "music_end": false
+        },
+        {
+          "speaker": "Grant",
+          "text": "Where am I?!",
+          "left_sprite": "sprite1",
+          "right_sprite": "",
+          "center_sprite": "",
+          "background": "background1"
+        }
+      ]
+    }
+  },
+
+  "event2": {
+    "scenes": {
+      "*1-3": [
+        {
+          "speaker": "Grant",
+          "text": "What!",
+          "sfx": "shake",
+          "left_sprite": "",
+          "right_sprite": "",
+          "center_sprite": "",
+          "background": "background1",
+          "music_file": "",
+          "music_start": true,
+          "music_end": false
+        },
+        {
+          "speaker": "Grant",
+          "text": "How can this watch be so cheap?",
+          "left_sprite": "sprite1",
+          "right_sprite": "",
+          "center_sprite": "",
+          "background": "background1"
+        }
+      ],
+      "*4": [
+        {
+          "speaker": "Grant",
+          "text": "What!",
+          "sfx": "shake",
+          "left_sprite": "",
+          "right_sprite": "",
+          "center_sprite": "",
+          "background": "background1",
+          "music_file": "",
+          "music_start": true,
+          "music_end": false
+        },
+        {
+          "speaker": "Grant",
+          "text": "How can this watch be so cheap?",
+          "left_sprite": "sprite1",
+          "right_sprite": "",
+          "center_sprite": "",
+          "background": "background1"
+        }
+      ]
+    }
+  },
+  "event2": ""
+}
