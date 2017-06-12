@@ -1,4 +1,4 @@
-package com.trwcomics.net.vnovel
+package net.trwcomics.vnovel
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.trwcomics.net.trwcomics", appContext.packageName)
+        assertEquals("net.trwcomics.vnovel", appContext.packageName)
     }
 }

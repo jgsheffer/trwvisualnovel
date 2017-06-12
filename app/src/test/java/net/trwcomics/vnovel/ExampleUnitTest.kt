@@ -1,4 +1,4 @@
-package com.trwcomics.net.vnovel
+package net.trwcomics.vnovel
 
 import org.junit.Test
 

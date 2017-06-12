@@ -1,10 +1,9 @@
-package com.trwcomics.net.vnovel
+package net.trwcomics.vnovel
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import org.jetbrains.anko.toast
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -64,7 +63,6 @@ class FullscreenActivity : AppCompatActivity() {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener)
-        findViewById(R.id.dummy_button).setOnClickListener(View.OnClickListener { toast("You clicked a button")})
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
