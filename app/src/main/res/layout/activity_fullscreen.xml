@@ -3,12 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0099cc"
-    tools:context="net.trwcomics.vnovel.FullscreenActivity">
+    android:id="@+id/fullscreen_activity"
+    tools:context="net.trwcomics.trwvisualnovel.FullscreenActivity"
+    >
     <include layout="@layout/view_background"/>
 
     <!--</include>-->
     <include layout="@layout/view_sprite_left"></include>
+    <include layout="@layout/view_sprite_right"></include>
+    <include layout="@layout/view_sprite_center"></include>
 <include layout="@layout/view_speech_box"></include>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/splash_screen"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/splash" />
+        <Button
+            android:id="@+id/continue_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="   Continue   "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="150dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:textColor="#000"
+            android:background="@drawable/rounded_edge"/>
+        <Button
+            android:id="@+id/new_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:text="   New Game   "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:textColor="#000"
+            android:background="@drawable/rounded_edge"/>
+    </FrameLayout>
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
@@ -18,7 +59,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:keepScreenOn="true"
-        android:text="Demo"
         android:textColor="#33b5e510"
         android:textSize="50sp"
         android:textStyle="bold" />

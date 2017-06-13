@@ -9,6 +9,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -19,6 +22,9 @@ import org.json.JSONException;
  * status bar and navigation/system bar) with user interaction.
  */
 public class FullscreenActivity extends AppCompatActivity {
+    /** Duration of wait **/
+    private final int SPLASH_DISPLAY_LENGTH = 5000;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -29,7 +35,7 @@ public class FullscreenActivity extends AppCompatActivity {
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
      * user interaction before hiding the system UI.
      */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
+    private static final int AUTO_HIDE_DELAY_MILLIS = 30000;
 
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -67,6 +73,27 @@ public class FullscreenActivity extends AppCompatActivity {
             mControlsView.setVisibility(View.VISIBLE);
         }
     };
+
+    private void setSplashButtons(){
+        findViewById(R.id.continue_game).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                findViewById(R.id.splash_screen).setVisibility(View.GONE);
+            }
+        });
+        findViewById(R.id.continue_game).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //                Show dialog to confirm
+//                Reset event number and decision string
+                findViewById(R.id.splash_screen).setVisibility(View.GONE);
+            }
+        });;
+
+
+    }
+
+
     private boolean mVisible;
     private final Runnable mHideRunnable = new Runnable() {
         @Override
@@ -88,16 +115,17 @@ public class FullscreenActivity extends AppCompatActivity {
             return false;
         }
     };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_fullscreen);
+        int thirdOfScreen = getWindowManager().getDefaultDisplay().getWidth()/3;
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
+        (findViewById(R.id.sprite_left)).getLayoutParams().width = thirdOfScreen;
+        (findViewById(R.id.sprite_right)).getLayoutParams().width = thirdOfScreen;
 
 
 //        // Set up the user interaction to manually show or hide the system UI.
@@ -113,6 +141,7 @@ public class FullscreenActivity extends AppCompatActivity {
         // while interacting with the UI.
 //        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
         loadEvent();
+        setSplashButtons();
     }
 
     @Override
@@ -122,6 +151,12 @@ public class FullscreenActivity extends AppCompatActivity {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
+        delayedHide(100);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         delayedHide(100);
     }
 
@@ -168,21 +203,23 @@ public class FullscreenActivity extends AppCompatActivity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-//    Initial scene load
-    private void loadEvent(){
+    //    Initial scene load
+    private void loadEvent() {
         updateEvent(0);
         handleTap();
     }
+
     private int scene = 0;
     private StoryEventHandler storyEventHandler = new StoryEventHandler(this);
-    private void handleTap(){
+
+    private void handleTap() {
         findViewById(R.id.speech_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("MYTEST", "Clicked" +getCurrentScenes());
-                scene = scene+1;
-                int numberOfScenes = getCurrentScenes().length()-1;
-                if (numberOfScenes < scene){
+                Log.d("MYTEST", "Clicked" + getCurrentScenes());
+                scene = scene + 1;
+                int numberOfScenes = getCurrentScenes().length() - 1;
+                if (numberOfScenes < scene) {
                     scene = 0;
                 }
                 updateEvent(scene);
@@ -190,31 +227,71 @@ public class FullscreenActivity extends AppCompatActivity {
         });
     }
 
-    private void updateEvent(int sceneNumber){
+    private void updateEvent(int sceneNumber) {
         JSONArray scenes = getCurrentScenes();
         try {
-            Log.d("back", "scne: "+sceneNumber+"   ::"+scenes.getJSONObject(sceneNumber).getString("background"));
             setBackground(scenes.getJSONObject(sceneNumber).getString("background"));
             setSpeaker(scenes.getJSONObject(sceneNumber).getString("speaker"));
             setSpeechText(scenes.getJSONObject(sceneNumber).getString("text"));
+            setSprites("left", scenes.getJSONObject(sceneNumber).getString("left_sprite"));
+            setSprites("center", scenes.getJSONObject(sceneNumber).getString("center_sprite"));
+            setSprites("right", scenes.getJSONObject(sceneNumber).getString("right_sprite"));
+            setBubbleDirection(scenes.getJSONObject(sceneNumber).getString("speaker_location"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private JSONArray getCurrentScenes(){
+    private JSONArray getCurrentScenes() {
         //        Load event number and decision path from share pref
-        return  storyEventHandler.getEvent(0, "*");
+        return storyEventHandler.getEvent(0, "*");
     }
 
-    private void setSpeaker(String speaker){
+    private void setSpeaker(String speaker) {
         ((TextView) findViewById(R.id.speech_speaker_text_field)).setText(speaker);
     }
 
-    private void setSpeechText(String sheechContent){
+    private void setSpeechText(String sheechContent) {
         ((TextView) findViewById(R.id.speech_content_text_field)).setText(sheechContent);
     }
-    private void setBackground(String resource){
+
+    private void setBubbleDirection(String speakerDirection){
+        LinearLayout speechBox = (LinearLayout) findViewById(R.id.speech_box);
+        if(speakerDirection.toLowerCase().equals("left")){
+            speechBox.setBackground(getDrawable(R.drawable.left_speech));
+        }
+        else if(speakerDirection.toLowerCase().equals("right")){
+            speechBox.setBackground(getDrawable(R.drawable.right_speech));
+        }
+        else {
+            speechBox.setBackground(getDrawable(R.drawable.center_speech));
+        }
+    }
+
+    private void setSprites(String position, String resource) {
+        position = position.toLowerCase();
+
+        int containerId;
+        if (position == "left") {
+            containerId = R.id.sprite_left;
+        } else if (position == "right") {
+            containerId = R.id.sprite_right;
+
+        } else {
+            containerId = R.id.sprite_center;
+        }
+        if (!resource.isEmpty()) {
+            int id = getResources().getIdentifier(resource, "drawable", getPackageName());
+            Drawable drawable = getDrawable(id);
+            ((ImageView) findViewById(containerId)).setImageDrawable(drawable);
+        } else {
+            ((ImageView) findViewById(containerId)).setImageDrawable(getDrawable(R.drawable.empty_m));
+        }
+
+
+    }
+
+    private void setBackground(String resource) {
         int id = getResources().getIdentifier(resource, "drawable", getPackageName());
         Drawable drawable = getDrawable(id);
         View background = findViewById(R.id.trw_background);

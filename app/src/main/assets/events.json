@@ -3,24 +3,53 @@
     "scenes": {
       "*": [
         {
-          "speaker": "Grant",
-          "text": "What!",
+          "speaker": "Amy",
+          "text": "Hey Roy!",
+          "speaker_location": "left",
           "sfx": "shake",
-          "left_sprite": "",
+          "left_sprite": "amy1",
           "right_sprite": "",
           "center_sprite": "",
-          "background": "background2",
+          "background": "road_m",
           "music_file": "",
           "music_start": true,
           "music_end": false
         },
         {
-          "speaker": "Grant",
-          "text": "Where am I?!",
-          "left_sprite": "sprite1",
-          "right_sprite": "",
+          "speaker": "Roy",
+          "text": "Yeah?  Whats up?",
+          "speaker_location": "right",
+          "left_sprite": "amy1",
+          "right_sprite": "roy1",
           "center_sprite": "",
-          "background": "background1"
+          "background": "road_m"
+        },
+        {
+          "speaker": "Amy",
+          "text": "Do you have any idea where we are?",
+          "speaker_location": "left",
+          "left_sprite": "amy1",
+          "right_sprite": "roy1",
+          "center_sprite": "",
+          "background": "road_m"
+        },
+        {
+          "speaker": "Roy",
+          "text": "Nope no idea.  What about you Evan?",
+          "speaker_location": "right",
+          "left_sprite": "amy1",
+          "right_sprite": "roy1",
+          "center_sprite": "",
+          "background": "road_m"
+        },
+        {
+          "speaker": "Evan",
+          "text": "I dunno... The forest?",
+          "speaker_location": "center",
+          "left_sprite": "",
+          "right_sprite": "",
+          "center_sprite": "eva1",
+          "background": "forest_m"
         }
       ]
     }
