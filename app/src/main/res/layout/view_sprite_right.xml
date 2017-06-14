@@ -7,11 +7,13 @@
     android:layout_gravity="end">
 
     <ImageView
+        android:layout_gravity="end"
         android:id="@+id/sprite_right"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="false"
         android:contentDescription="sprite_right"
+
         android:scaleType="centerCrop"
         android:src="@drawable/sprite" />
 

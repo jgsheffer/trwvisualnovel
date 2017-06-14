@@ -7,12 +7,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import net.trwcomics.trwvisualnovel.views.RpgTextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -144,6 +149,21 @@ public class FullscreenActivity extends AppCompatActivity {
         setSplashButtons();
     }
 
+    public void fadeView(View imageView, boolean fadeIn, int duration){
+        Animation animation;
+        if(fadeIn){
+            animation = new AlphaAnimation(0, 1);
+            animation.setInterpolator(new DecelerateInterpolator());
+            animation.setDuration(duration);
+        }
+        else{
+            animation = new AlphaAnimation(1, 0);
+            animation.setInterpolator(new AccelerateInterpolator());
+            animation.setDuration(duration);
+        }
+        imageView.setAnimation(animation);
+    }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -236,7 +256,7 @@ public class FullscreenActivity extends AppCompatActivity {
             setSprites("left", scenes.getJSONObject(sceneNumber).getString("left_sprite"));
             setSprites("center", scenes.getJSONObject(sceneNumber).getString("center_sprite"));
             setSprites("right", scenes.getJSONObject(sceneNumber).getString("right_sprite"));
-            setBubbleDirection(scenes.getJSONObject(sceneNumber).getString("speaker_location"));
+            setSpeakerDirection(scenes.getJSONObject(sceneNumber).getString("speaker_location"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -248,24 +268,31 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void setSpeaker(String speaker) {
-        ((TextView) findViewById(R.id.speech_speaker_text_field)).setText(speaker);
+        TextView speakerTextField = ((TextView) findViewById(R.id.speech_speaker_text_field));
+        fadeView(speakerTextField, false, 0);
+        fadeView(speakerTextField, true, 300);
+        speakerTextField.setText(speaker);
     }
 
     private void setSpeechText(String sheechContent) {
-        ((TextView) findViewById(R.id.speech_content_text_field)).setText(sheechContent);
+        ((RpgTextView) findViewById(R.id.speech_content_text_field)).setText(sheechContent);
     }
 
-    private void setBubbleDirection(String speakerDirection){
-        LinearLayout speechBox = (LinearLayout) findViewById(R.id.speech_box);
+    private void setSpeakerDirection(String speakerDirection){
+        TextView speechTextView = (TextView) findViewById(R.id.speech_speaker_text_field);
         if(speakerDirection.toLowerCase().equals("left")){
-            speechBox.setBackground(getDrawable(R.drawable.left_speech));
+            speechTextView.setGravity(Gravity.LEFT);
+            speechTextView.setPadding(50,10,0,0);
         }
-        else if(speakerDirection.toLowerCase().equals("right")){
-            speechBox.setBackground(getDrawable(R.drawable.right_speech));
-        }
-        else {
-            speechBox.setBackground(getDrawable(R.drawable.center_speech));
-        }
+//        else if(speakerDirection.toLowerCase().equals("right")){
+//            speechTextView.setPadding(0,10,50,0);
+//            speechTextView.setGravity(Gravity.RIGHT);
+//        }
+//        else {
+//            speechTextView.setPadding(0,10,0,0);
+//            speechTextView.setGravity(Gravity.CENTER);
+//
+//        }
     }
 
     private void setSprites(String position, String resource) {
@@ -280,12 +307,15 @@ public class FullscreenActivity extends AppCompatActivity {
         } else {
             containerId = R.id.sprite_center;
         }
+        ImageView sprite = (ImageView) findViewById(containerId);
         if (!resource.isEmpty()) {
             int id = getResources().getIdentifier(resource, "drawable", getPackageName());
             Drawable drawable = getDrawable(id);
-            ((ImageView) findViewById(containerId)).setImageDrawable(drawable);
+            fadeView(sprite, true, 300);
+            sprite.setImageDrawable(drawable);
         } else {
-            ((ImageView) findViewById(containerId)).setImageDrawable(getDrawable(R.drawable.empty_m));
+            fadeView(sprite, false, 300);
+            sprite.setImageDrawable(getDrawable(R.drawable.empty_m));
         }
 
 

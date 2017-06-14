@@ -15,22 +15,24 @@
 
         android:background="@drawable/rounded_edge">
         <TextView
-            android:paddingTop="5dp"
+            android:paddingTop="10dp"
+            android:paddingRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:textSize="20dp"
+            android:textSize="25dp"
+            android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold"
             android:text="Joe Somebody"
             android:id="@+id/speech_speaker_text_field"/>
-        <TextView
-            android:paddingLeft="5dp"
+        <net.trwcomics.trwvisualnovel.views.RpgTextView
+            android:paddingLeft="15dp"
             android:paddingRight="5dp"
             android:paddingBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:textSize="20dp"
             android:id="@+id/speech_content_text_field"
-            android:text="This is a test of the text box which will contain a certain amount of speach data" />
+            android:text="" />
     </LinearLayout>
 
 </LinearLayout>
