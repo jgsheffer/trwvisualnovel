@@ -17,6 +17,8 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.otto.Bus;
+
 import net.trwcomics.trwvisualnovel.views.RpgTextView;
 
 import org.json.JSONArray;
@@ -27,8 +29,8 @@ import org.json.JSONException;
  * status bar and navigation/system bar) with user interaction.
  */
 public class FullscreenActivity extends AppCompatActivity {
-    /** Duration of wait **/
-    private final int SPLASH_DISPLAY_LENGTH = 5000;
+    RpgTextView speechContentTextField;
+    public Bus bus = new Bus();
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -129,6 +131,7 @@ public class FullscreenActivity extends AppCompatActivity {
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
+        speechContentTextField = ((RpgTextView) findViewById(R.id.speech_content_text_field));
         (findViewById(R.id.sprite_left)).getLayoutParams().width = thirdOfScreen;
         (findViewById(R.id.sprite_right)).getLayoutParams().width = thirdOfScreen;
 
@@ -158,7 +161,7 @@ public class FullscreenActivity extends AppCompatActivity {
         }
         else{
             animation = new AlphaAnimation(1, 0);
-            animation.setInterpolator(new AccelerateInterpolator());
+            animation.setInterpolator(new DecelerateInterpolator());
             animation.setDuration(duration);
         }
         imageView.setAnimation(animation);
@@ -200,6 +203,7 @@ public class FullscreenActivity extends AppCompatActivity {
         // Schedule a runnable to remove the status and navigation bar after a delay
         mHideHandler.removeCallbacks(mShowPart2Runnable);
         mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
+        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
     }
 
     @SuppressLint("InlinedApi")
@@ -237,12 +241,21 @@ public class FullscreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("MYTEST", "Clicked" + getCurrentScenes());
-                scene = scene + 1;
-                int numberOfScenes = getCurrentScenes().length() - 1;
-                if (numberOfScenes < scene) {
-                    scene = 0;
+
+                try {
+                    if(!speechContentTextField.forceLoad(getCurrentScenes().getJSONObject(scene).getString("text"))) {
+                        scene = scene + 1;
+                        int numberOfScenes = getCurrentScenes().length() - 1;
+                        if (numberOfScenes < scene) {
+                            scene = 0;
+                        }
+
+
+                        updateEvent(scene);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                updateEvent(scene);
             }
         });
     }
@@ -275,7 +288,7 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private void setSpeechText(String sheechContent) {
-        ((RpgTextView) findViewById(R.id.speech_content_text_field)).setText(sheechContent);
+        speechContentTextField.setText(sheechContent);
     }
 
     private void setSpeakerDirection(String speakerDirection){
@@ -311,11 +324,13 @@ public class FullscreenActivity extends AppCompatActivity {
         if (!resource.isEmpty()) {
             int id = getResources().getIdentifier(resource, "drawable", getPackageName());
             Drawable drawable = getDrawable(id);
-            fadeView(sprite, true, 300);
             sprite.setImageDrawable(drawable);
+
+            sprite.setVisibility(View.VISIBLE);
+            fadeView(sprite, true, 300);
         } else {
-            fadeView(sprite, false, 300);
             sprite.setImageDrawable(getDrawable(R.drawable.empty_m));
+            fadeView(sprite, false, 300);
         }
 
 
