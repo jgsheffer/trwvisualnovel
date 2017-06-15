@@ -282,7 +282,6 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private void setSpeaker(String speaker) {
         TextView speakerTextField = ((TextView) findViewById(R.id.speech_speaker_text_field));
-        fadeView(speakerTextField, false, 0);
         fadeView(speakerTextField, true, 300);
         speakerTextField.setText(speaker);
     }
@@ -325,12 +324,9 @@ public class FullscreenActivity extends AppCompatActivity {
             int id = getResources().getIdentifier(resource, "drawable", getPackageName());
             Drawable drawable = getDrawable(id);
             sprite.setImageDrawable(drawable);
-
-            sprite.setVisibility(View.VISIBLE);
             fadeView(sprite, true, 300);
         } else {
             sprite.setImageDrawable(getDrawable(R.drawable.empty_m));
-            fadeView(sprite, false, 300);
         }
 
 

@@ -12,7 +12,7 @@ import android.widget.TextView;
 public class RpgTextView extends android.support.v7.widget.AppCompatTextView {
     public int textSpeed = 30;
     private boolean isLastCharacterDisplayed = false;
-    private final Handler handler = new Handler();
+    private Handler handler = new Handler();
     int numberOfCharactersDisplayed = 0;
     BufferType bufferType;
 
@@ -31,44 +31,47 @@ public class RpgTextView extends android.support.v7.widget.AppCompatTextView {
         isLastCharacterDisplayed = false;
         setTextOverTime(text, textSpeed);
     }
-
+  int currentChar = 0;
     //    Speed is the number of milliseconds between characters
     public void setTextOverTime(final CharSequence text, final int speed) {
+        currentChar = 0;
         numberOfCharactersDisplayed = 0;
-        int nextCharSpeed = speed;
-        for (int i = 0; i < text.length(); i++) {
-            final char c = text.charAt(i);
-            final Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
+        final int stringLength = text.length();
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (currentChar < stringLength) {
+                    final char c = text.charAt(currentChar);
                     numberOfCharactersDisplayed++;
                     append("" + c);
-                    if(numberOfCharactersDisplayed == text.length()){
-                        isLastCharacterDisplayed = true;
-                    }
-                    else{
-                        isLastCharacterDisplayed = false;
-                    }
+                    currentChar++;
+                    handler.postDelayed(this, speed);
                 }
+                else{
+                    isLastCharacterDisplayed = true;
+                }
+            }
 
-            };
-
-            handler.postDelayed(runnable, nextCharSpeed);
-            nextCharSpeed = nextCharSpeed + speed;
-        }
-
-
+        };
+if(handler == null) {
+    handler = new Handler();
+}
+        handler.postDelayed(runnable, speed);
     }
 
 
+
+
+
     public boolean forceLoad(CharSequence text) {
-            boolean forcedFinish = false;
-            if(!isLastCharacterDisplayed) {
-                handler.removeCallbacksAndMessages(null);
-                super.setText(text, bufferType);
-                isLastCharacterDisplayed = true;
-                forcedFinish = true;
-            }
-            return forcedFinish;
+        boolean forcedFinish = false;
+        if (!isLastCharacterDisplayed) {
+            handler.removeCallbacksAndMessages(null);
+            super.setText(text, bufferType);
+            isLastCharacterDisplayed = true;
+            forcedFinish = true;
+        }
+        return forcedFinish;
     }
 }
