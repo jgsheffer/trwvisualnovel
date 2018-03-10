@@ -6,11 +6,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
@@ -30,7 +28,10 @@ import org.json.JSONException;
  */
 public class FullscreenActivity extends AppCompatActivity {
     RpgTextView speechContentTextField;
+    int eventNumber = 0;
+    private StoryEventHandler storyEventHandler;
     public Bus bus = new Bus();
+    private int scene = 0;
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -86,6 +87,7 @@ public class FullscreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 findViewById(R.id.splash_screen).setVisibility(View.GONE);
+                findViewById(R.id.splash_background).setVisibility(View.GONE);
             }
         });
         findViewById(R.id.continue_game).setOnClickListener(new View.OnClickListener() {
@@ -94,6 +96,7 @@ public class FullscreenActivity extends AppCompatActivity {
                 //                Show dialog to confirm
 //                Reset event number and decision string
                 findViewById(R.id.splash_screen).setVisibility(View.GONE);
+                findViewById(R.id.splash_background).setVisibility(View.GONE);
             }
         });;
 
@@ -124,7 +127,9 @@ public class FullscreenActivity extends AppCompatActivity {
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        scene = 0;
         super.onCreate(savedInstanceState);
+        storyEventHandler = new StoryEventHandler(this);
         setContentView(R.layout.activity_fullscreen);
         int thirdOfScreen = getWindowManager().getDefaultDisplay().getWidth()/3;
 
@@ -233,31 +238,39 @@ public class FullscreenActivity extends AppCompatActivity {
         handleTap();
     }
 
-    private int scene = 0;
-    private StoryEventHandler storyEventHandler = new StoryEventHandler(this);
 
     private void handleTap() {
         findViewById(R.id.speech_container).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("MYTEST", "Clicked" + getCurrentScenes());
+//                Log.d("MYTEST", "Clicked" + getCurrentScenes());
 
                 try {
                     if(!speechContentTextField.forceLoad(getCurrentScenes().getJSONObject(scene).getString("text"))) {
                         scene = scene + 1;
                         int numberOfScenes = getCurrentScenes().length() - 1;
-                        if (numberOfScenes < scene) {
-                            scene = 0;
+                        if (numberOfScenes < scene ) {
+                            if (storyEventHandler.hasNextEvent(eventNumber, "*")) {
+                                scene = 0;
+                                eventNumber = eventNumber+1;
+                            } else{
+                                eventNumber = 0;
+                                scene = 0;
+                            }
                         }
-
 
                         updateEvent(scene);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    eventNumber = 0;
+                    scene = 0;
                 }
             }
         });
+    }
+    private boolean hasScene() throws JSONException {
+        return (getCurrentScenes().length() > scene);
     }
 
     private void updateEvent(int sceneNumber) {
@@ -277,7 +290,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private JSONArray getCurrentScenes() {
         //        Load event number and decision path from share pref
-        return storyEventHandler.getEvent(0, "*");
+        return storyEventHandler.getEvent(eventNumber, "*");
     }
 
     private void setSpeaker(String speaker) {

@@ -9,50 +9,46 @@
     <include layout="@layout/view_background"/>
 
     <!--</include>-->
-    <include layout="@layout/view_sprite_left"></include>
-    <include layout="@layout/view_sprite_right"></include>
-    <include layout="@layout/view_sprite_center"></include>
+
+    <include layout="@layout/view_sprites"></include>
 <include layout="@layout/view_speech_box"></include>
-    <FrameLayout
+    <ImageView
+        android:id="@+id/splash_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash" />
+    <LinearLayout
         android:id="@+id/splash_screen"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:weightSum="100"
         >
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/splash" />
         <Button
             android:id="@+id/continue_game"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="20dp"
+            android:layout_weight="10"
+            android:elevation="50dp"
             android:text="   Continue   "
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:layout_marginTop="150dp"
             android:layout_gravity="center"
             android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="#000"
             android:background="@drawable/rounded_edge"/>
         <Button
             android:id="@+id/new_game"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="200dp"
+            android:elevation="50dp"
+            android:layout_width="150dp"
+            android:layout_height="20dp"
+            android:layout_weight="10"
             android:text="   New Game   "
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:layout_gravity="center"
             android:backgroundTint="@color/colorPrimaryDark"
             android:textColor="#000"
             android:background="@drawable/rounded_edge"/>
-    </FrameLayout>
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
+    </LinearLayout>
     <TextView
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"

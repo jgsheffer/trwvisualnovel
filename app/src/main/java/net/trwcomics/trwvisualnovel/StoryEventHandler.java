@@ -15,20 +15,35 @@ import java.io.InputStream;
 
 public class StoryEventHandler {
     private Activity activity;
+    JSONObject json;
 
     public StoryEventHandler(Activity activity) {
         this.activity = activity;
+        json = loadJSON("events.json");
     }
 
     public JSONArray getEvent(int eventNumber, String decisionPath) {
-        JSONObject json = loadJSON("events.json");
         JSONArray eventScenes = null;
         try {
-            eventScenes = json.getJSONObject("event"+eventNumber).getJSONObject("scenes").getJSONArray(decisionPath);
+                eventScenes = json.getJSONObject("event" + eventNumber).getJSONObject("scenes").getJSONArray(decisionPath);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return eventScenes;
+    }
+
+
+    public boolean hasNextEvent(int eventNumber, String decisionPath){
+        boolean hasEvent = false;
+        int nextEventNumber = eventNumber+1;
+
+        try {
+            if (json.getJSONObject("event"+nextEventNumber) != null && json.getJSONObject("event"+nextEventNumber).getJSONObject("scenes").getJSONArray(decisionPath) != null);
+            hasEvent = true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return hasEvent;
     }
 
     public JSONObject loadJSON(String fileName) {

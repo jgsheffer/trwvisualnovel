@@ -55,9 +55,9 @@
     }
   },
 
-  "event2": {
+  "event1": {
     "scenes": {
-      "*1-3": [
+      "*": [
         {
           "speaker": "Grant",
           "text": "What!",
@@ -65,7 +65,7 @@
           "left_sprite": "",
           "right_sprite": "",
           "center_sprite": "",
-          "background": "background1",
+          "background": "forest_m",
           "music_file": "",
           "music_start": true,
           "music_end": false
@@ -73,10 +73,10 @@
         {
           "speaker": "Grant",
           "text": "How can this watch be so cheap?",
-          "left_sprite": "sprite1",
+          "left_sprite": "amy1",
           "right_sprite": "",
           "center_sprite": "",
-          "background": "background1"
+          "background": "forest_m"
         }
       ],
       "*4": [
@@ -87,7 +87,7 @@
           "left_sprite": "",
           "right_sprite": "",
           "center_sprite": "",
-          "background": "background1",
+          "background": "forest_m",
           "music_file": "",
           "music_start": true,
           "music_end": false
@@ -95,13 +95,12 @@
         {
           "speaker": "Grant",
           "text": "How can this watch be so cheap?",
-          "left_sprite": "sprite1",
+          "left_sprite": "amy1",
           "right_sprite": "",
           "center_sprite": "",
-          "background": "background1"
+          "background": "forest_m"
         }
       ]
     }
-  },
-  "event2": ""
+  }
 }
