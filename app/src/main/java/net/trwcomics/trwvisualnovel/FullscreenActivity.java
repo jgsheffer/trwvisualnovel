@@ -82,23 +82,26 @@ public class FullscreenActivity extends AppCompatActivity {
         }
     };
 
-    private void setSplashButtons(){
+    private void setSplashButtons() {
         findViewById(R.id.continue_game).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 findViewById(R.id.splash_screen).setVisibility(View.GONE);
                 findViewById(R.id.splash_background).setVisibility(View.GONE);
+                loadEvent();
             }
         });
-        findViewById(R.id.continue_game).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.new_game).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //                Show dialog to confirm
 //                Reset event number and decision string
                 findViewById(R.id.splash_screen).setVisibility(View.GONE);
                 findViewById(R.id.splash_background).setVisibility(View.GONE);
+                loadEvent();
             }
-        });;
+        });
+        ;
 
 
     }
@@ -125,13 +128,14 @@ public class FullscreenActivity extends AppCompatActivity {
             return false;
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         scene = 0;
         super.onCreate(savedInstanceState);
         storyEventHandler = new StoryEventHandler(this);
         setContentView(R.layout.activity_fullscreen);
-        int thirdOfScreen = getWindowManager().getDefaultDisplay().getWidth()/3;
+        int thirdOfScreen = getWindowManager().getDefaultDisplay().getWidth() / 3;
 
         mVisible = true;
         mControlsView = findViewById(R.id.fullscreen_content_controls);
@@ -157,14 +161,13 @@ public class FullscreenActivity extends AppCompatActivity {
         setSplashButtons();
     }
 
-    public void fadeView(View imageView, boolean fadeIn, int duration){
+    public void fadeView(View imageView, boolean fadeIn, int duration) {
         Animation animation;
-        if(fadeIn){
+        if (fadeIn) {
             animation = new AlphaAnimation(0, 1);
             animation.setInterpolator(new DecelerateInterpolator());
             animation.setDuration(duration);
-        }
-        else{
+        } else {
             animation = new AlphaAnimation(1, 0);
             animation.setInterpolator(new DecelerateInterpolator());
             animation.setDuration(duration);
@@ -238,6 +241,12 @@ public class FullscreenActivity extends AppCompatActivity {
         handleTap();
     }
 
+    private void resetGame(){
+        findViewById(R.id.speech_container).setOnClickListener(null);
+        findViewById(R.id.splash_screen).setVisibility(View.VISIBLE);
+        findViewById(R.id.splash_background).setVisibility(View.VISIBLE);
+    }
+
 
     private void handleTap() {
         findViewById(R.id.speech_container).setOnClickListener(new View.OnClickListener() {
@@ -246,16 +255,18 @@ public class FullscreenActivity extends AppCompatActivity {
 //                Log.d("MYTEST", "Clicked" + getCurrentScenes());
 
                 try {
-                    if(!speechContentTextField.forceLoad(getCurrentScenes().getJSONObject(scene).getString("text"))) {
+                    if (!speechContentTextField.forceLoad(getCurrentScenes().getJSONObject(scene).getString("text"))) {
                         scene = scene + 1;
                         int numberOfScenes = getCurrentScenes().length() - 1;
-                        if (numberOfScenes < scene ) {
+                        if (numberOfScenes < scene) {
                             if (storyEventHandler.hasNextEvent(eventNumber, "*")) {
                                 scene = 0;
-                                eventNumber = eventNumber+1;
-                            } else{
+                                eventNumber = eventNumber + 1;
+                            } else {
                                 eventNumber = 0;
                                 scene = 0;
+
+                                resetGame();
                             }
                         }
 
@@ -263,12 +274,15 @@ public class FullscreenActivity extends AppCompatActivity {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    eventNumber = 0;
-                    scene = 0;
+
+                    findViewById(R.id.splash_screen).setVisibility(View.VISIBLE);
+                    findViewById(R.id.splash_background).setVisibility(View.VISIBLE);
+                    resetGame();
                 }
             }
         });
     }
+
     private boolean hasScene() throws JSONException {
         return (getCurrentScenes().length() > scene);
     }
@@ -303,11 +317,11 @@ public class FullscreenActivity extends AppCompatActivity {
         speechContentTextField.setText(sheechContent);
     }
 
-    private void setSpeakerDirection(String speakerDirection){
+    private void setSpeakerDirection(String speakerDirection) {
         TextView speechTextView = (TextView) findViewById(R.id.speech_speaker_text_field);
-        if(speakerDirection.toLowerCase().equals("left")){
+        if (speakerDirection.toLowerCase().equals("left")) {
             speechTextView.setGravity(Gravity.LEFT);
-            speechTextView.setPadding(50,10,0,0);
+            speechTextView.setPadding(50, 10, 0, 0);
         }
 //        else if(speakerDirection.toLowerCase().equals("right")){
 //            speechTextView.setPadding(0,10,50,0);
